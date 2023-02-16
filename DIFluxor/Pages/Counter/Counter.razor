@@ -1,0 +1,38 @@
+﻿@page "/counter"
+@using Fluxor
+@using DIFluxor.Store
+@using DIFluxor.Pages.Counter.ViewModel
+@inherits MyComponentBase<ICounterViewModel>
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count from component: @State.Value.Counter</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Increment</button>
+
+<p role="status">Current count from ViewModel: @_viewModelCount</p>
+
+<button class="btn btn-secondary" @onclick="GetFromViewModel">Get count from ViewModel</button>
+
+@code {
+    private int _viewModelCount;
+
+    [Inject]
+    private IState<CounterState> State { get; set; } = null!;
+    
+    [Inject]
+    private IDispatcher Dispatcher { get; set; } = null!;
+    
+    private void IncrementCount()
+    {
+        Console.WriteLine("Dispatched");
+        Dispatcher.Dispatch(new CounterIncrementAction());
+    }
+    
+    private void GetFromViewModel()
+    {
+        _viewModelCount = ViewModel.GetCount();
+    }
+}
